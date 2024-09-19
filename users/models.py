@@ -25,4 +25,4 @@ class CustomUser(AbstractUser):
 
 
     def __str__(self):
-        return '__all__'
+        return self.username
