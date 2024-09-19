@@ -157,3 +157,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = '714d5b872a3750'
+EMAIL_HOST_PASSWORD = '**********12e'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'no-reply@ruralmarket.com'
