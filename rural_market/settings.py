@@ -48,6 +48,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'users',
+    'category',
+    'products',
+    'cart',
+    'orders',
+    'orders_product',
+    'reviews',
+
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
 
