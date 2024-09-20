@@ -9,13 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from decouple import config
 
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
 import environ
-import os
 
 env = environ.Env()
 environ.Env.read_env()
