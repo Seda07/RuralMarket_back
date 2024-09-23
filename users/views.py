@@ -2,7 +2,7 @@ from .models import CustomUser
 from rest_framework import generics, permissions, views, status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from .serializers import RegisterSerializer
+from .serializer import RegisterSerializer
 
 
 class RegisterView(generics.CreateAPIView):
