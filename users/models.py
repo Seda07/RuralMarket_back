@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     )
     phone = models.CharField(max_length=20, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
-    photo = CloudinaryField('photo', null=True, blank=True)
+    photo = CloudinaryField('photo', null=True, blank=True, folder="users")
     user_description = models.CharField(max_length=2500, null=True, blank=True)
     province = models.CharField(max_length=50, null=True, blank=True)
     zip_code = models.CharField(max_length=20, null=True, blank=True)
