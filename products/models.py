@@ -4,6 +4,7 @@ from rest_framework.exceptions import ValidationError
 from category.models import Category
 from users.models import CustomUser
 
+
 class Product(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
