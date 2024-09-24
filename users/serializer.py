@@ -30,3 +30,37 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = "__all__"
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False)
+    confirm_password = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = "__all__"
+
+    def validate(self, data):
+        if 'password' in data:
+            if 'confirm_password' not in data:
+                raise serializers.ValidationError({"confirm_password": "Debes confirmar la nueva contraseña."})
+            if data['password'] != data['confirm_password']:
+                raise serializers.ValidationError({"password": "Las contraseñas deben coincidir."})
+        return data
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+
+        password = validated_data.get('password')
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+        return instance
+
