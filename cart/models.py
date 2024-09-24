@@ -8,7 +8,7 @@ class Cart(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Carrito de {self.buyer.username} creado en {self.date_creation}'
+        return f'Carrito de {self.user.username} creado en {self.date_created}'
 
 
 class CartItem(models.Model):
