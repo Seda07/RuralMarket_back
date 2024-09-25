@@ -23,6 +23,5 @@ class CustomUser(AbstractUser):
     zip_code = models.CharField(max_length=20, null=True, blank=True)
     register_date = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
         return self.username

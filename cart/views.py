@@ -14,7 +14,7 @@ class CartView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Cart.objects.filter(comprador=self.request.user)
+        return Cart.objects.filter(user=self.request.user)
 
 
 
