@@ -4,7 +4,6 @@ from rest_framework.exceptions import ValidationError
 from category.models import Category
 from users.models import CustomUser
 
-
 class Product(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
@@ -29,7 +28,4 @@ class Product(models.Model):
             raise ValidationError('El precio debe ser mayor a cero.')
 
     def __str__(self):
-        # Descripción más completa del producto
         return f'{self.name} (Categoria: {self.category.name}, Vendedor: {self.seller.username})'
-
-
