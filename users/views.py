@@ -48,3 +48,7 @@ class UserDeleteView(generics.DestroyAPIView):
     def get_object(self):
         return self.request.user
 
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.filter(user_type='seller')  # Filtra solo a los vendedores
+    serializer_class = UserDetailSerializer
+    permission_classes = [permissions.AllowAny]
