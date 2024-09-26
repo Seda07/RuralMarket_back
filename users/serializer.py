@@ -37,8 +37,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        if instance.photo:
+        if instance.photo and hasattr(instance.photo, 'url'):
             representation['photo'] = instance.photo.url
+        else:
+            representation['photo'] = None
         return representation
 
 
@@ -61,13 +63,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
+        # Actualizamos los campos que recibimos
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
 
+        # Actualizamos la foto de perfil si está presente
         if 'photo' in validated_data:
             instance.photo = validated_data.get('photo', instance.photo)
 
+        # Si se proporciona la contraseña, se actualiza de manera segura
         password = validated_data.get('password')
         if password:
             instance.set_password(password)
