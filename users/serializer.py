@@ -8,11 +8,12 @@ class RegisterSerializer(serializers.ModelSerializer):
     user_description = serializers.CharField(required=False, allow_blank=True, max_length=2500)
     province = serializers.CharField(required=False, allow_blank=True, max_length=50)
     zip_code = serializers.CharField(required=False, allow_blank=True, max_length=20)
+    first_name = serializers.CharField(required=True, max_length=30)
 
     class Meta:
         model = CustomUser
         fields = [
-            'username', 'email', 'password', 'user_type', 'phone',
+            'first_name','username', 'email', 'password', 'user_type', 'phone',
             'address', 'photo', 'user_description', 'province',
             'zip_code', 'register_date'
         ]
@@ -63,16 +64,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        # Actualizamos los campos que recibimos
+
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
 
-        # Actualizamos la foto de perfil si está presente
+
         if 'photo' in validated_data:
             instance.photo = validated_data.get('photo', instance.photo)
 
-        # Si se proporciona la contraseña, se actualiza de manera segura
         password = validated_data.get('password')
         if password:
             instance.set_password(password)
