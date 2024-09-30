@@ -8,7 +8,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     user_description = serializers.CharField(required=False, allow_blank=True, max_length=2500)
     province = serializers.CharField(required=False, allow_blank=True, max_length=50)
     zip_code = serializers.CharField(required=False, allow_blank=True, max_length=20)
-    first_name = serializers.CharField(required=True, max_length=30)
+    first_name = serializers.CharField(required=False, max_length=30)
 
     class Meta:
         model = CustomUser
