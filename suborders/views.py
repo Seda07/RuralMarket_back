@@ -9,4 +9,7 @@ class SuborderView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Suborder.objects.filter(user=self.request.user)
+        return Suborder.objects.filter(seller=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user)
