@@ -68,6 +68,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.address = validated_data.get('address', instance.address)
+        instance.phone = validated_data.get('phone', instance.phone)
+        instance.user_description = validated_data.get('user_description', instance.user_description)
+        instance.province = validated_data.get('province', instance.province)
+        instance.zip_code = validated_data.get('zip_code', instance.zip_code)
+
 
 
         if 'photo' in validated_data:
