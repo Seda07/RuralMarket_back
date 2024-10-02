@@ -2,27 +2,36 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import ProductSerializer
 from .models import Product
-
+from .serializer import ProductSerializer
 
 class ProductView(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
-    permission_classes = [IsAuthenticated]  # Asegúrate de que el usuario esté autenticado
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         user = self.request.user
 
-        # Impresión de depuración para ver el tipo de usuario
-        print(f"Tipo de usuario: {user.user_type}")  # Verifica el tipo de usuario
-        print(f"Usuario que intenta crear el producto: {user.username}")  # Muestra el nombre del usuario
-
-        # Verificar que el usuario sea un vendedor
         if user.user_type != 'seller':
-            print("Acceso denegado: solo los vendedores pueden agregar productos.")
             return Response({'detail': 'Solo los vendedores pueden agregar productos.'},
                             status=status.HTTP_403_FORBIDDEN)
 
-        # Guardar el producto y asignar el vendedor
+        name = serializer.validated_data.get('name')
+        category = serializer.validated_data.get('category')
+        stock = serializer.validated_data.get('stock')
+
+
+        product_exists = Product.objects.filter(name=name, category=category, seller=user).exists()
+        if product_exists:
+            return Response({'detail': f"El producto '{name}' ya está registrado por este vendedor."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+        if stock <= 0:
+            return Response({'detail': 'El stock debe ser mayor a 0 para crear el producto.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
         serializer.save(seller=user)
+

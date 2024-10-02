@@ -14,16 +14,15 @@ class Product(models.Model):
     seller = models.ForeignKey(CustomUser, related_name="products", on_delete=models.CASCADE)
 
     def clean(self):
-        """Validaciones adicionales para el producto"""
-        # Validar que el stock no sea negativo
+
         if self.stock < 0:
             raise ValidationError('El stock no puede ser negativo.')
 
-        # Validar que solo los usuarios con tipo 'seller' puedan agregar productos
+
         if self.seller.user_type != 'seller':
             raise ValidationError('Solo los vendedores pueden agregar productos.')
 
-        # Validar que el precio no sea negativo o cero
+
         if self.price <= 0:
             raise ValidationError('El precio debe ser mayor a cero.')
 
