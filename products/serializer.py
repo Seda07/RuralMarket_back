@@ -14,5 +14,3 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("El stock no puede ser negativo.")
         return value
 
-
-
