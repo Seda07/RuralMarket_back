@@ -4,7 +4,7 @@ from products.models import Product
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(CustomUser, related_name="cart", on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name="cart", on_delete=models.CASCADE, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
