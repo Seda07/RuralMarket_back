@@ -12,11 +12,11 @@ class CartItemView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        cart = Cart.objects.get(user=self.request.user)
-        return CartItem.objects.filter(cart=cart)
+        cart, _ = Cart.objects.get_or_create(user=self.request.user)
+        return CartItem.objects.filter(cart_id=cart.id)
 
     def create(self, request, *args, **kwargs):
-        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart, _ = Cart.objects.get_or_create(user=request.user)
 
         product_id = request.data.get('product_id')
         quantity = int(request.data.get('quantity', 1))
@@ -66,11 +66,20 @@ class CartView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
-        return Cart.objects.filter(id=cart.id)
+        cart, _ = Cart.objects.get_or_create(user=self.request.user)
+        return Cart.objects.filter(id=cart.id) if cart else Cart.objects.none()
+
+    def create(self, request, *args, **kwargs):
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            return Response({"error": "El usuario ya tiene un carrito existente."}, status=status.HTTP_400_BAD_REQUEST)
+
+        cart = Cart.objects.create(user=request.user)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve_cart_summary(self, request):
-        cart = Cart.objects.get(user=request.user)
+        cart = Cart.objects.get(user=request.user).first()
 
         total_quantity = sum(item.quantity for item in cart.cart_items.all())
         total_price = sum(item.quantity * item.product.price for item in cart.cart_items.all())
@@ -79,3 +88,4 @@ class CartView(viewsets.ModelViewSet):
             "total_quantity": total_quantity,
             "total_price": total_price
         }, status=status.HTTP_200_OK)
+
