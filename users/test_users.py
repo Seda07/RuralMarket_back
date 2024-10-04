@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 
 # Importamos el modelo CustomUser
 CustomUser = get_user_model()
@@ -84,3 +85,6 @@ class TestCustomUser:
         # Then: El usuario debe eliminarse correctamente
         with pytest.raises(CustomUser.DoesNotExist):
             CustomUser.objects.get(id=user_id)
+
+
+
