@@ -3,12 +3,29 @@ from rest_framework import generics, permissions, views, status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .serializer import RegisterSerializer, UserDetailSerializer, UserUpdateSerializer
+from rest_framework.exceptions import ValidationError
 
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        first_name = request.data.get('first_name')
+        email = request.data.get('email')
+
+        if CustomUser.objects.filter(username=username).exists():
+            raise ValidationError({"username": "Este nombre de usuario ya está en uso. Por favor, elige otro."})
+
+        if CustomUser.objects.filter(email=email).exists():
+            raise ValidationError({"email": "Este correo electrónico ya está en uso. Por favor, elige otro."})
+
+        if CustomUser.objects.filter(first_name=first_name).exists():
+            raise ValidationError({"first_name": "Este nombre ya está en uso. Por favor, elige otro."})
+
+        return super().create(request, *args, **kwargs)
 
 
 class LogoutView(views.APIView):
