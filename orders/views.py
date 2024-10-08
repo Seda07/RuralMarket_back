@@ -7,6 +7,7 @@ from suborders.models import Suborder
 from suborders_product.models import SuborderProduct
 from orders.serializer import OrderSerializer
 from decimal import Decimal
+from utils.mails import send_order_confirmation_email, send_seller_order_notification
 
 
 class CreateOrderView(viewsets.ModelViewSet):
@@ -38,6 +39,8 @@ class CreateOrderView(viewsets.ModelViewSet):
             raise ValidationError({"message": "No tienes productos en tu carrito."})
 
         suborders_data = {}
+        products_detail = []  # Para almacenar detalles de los productos
+
         for cart_item in cart_items:
             product = cart_item.product
             seller = product.seller
@@ -64,7 +67,19 @@ class CreateOrderView(viewsets.ModelViewSet):
             suborder.subtotal += product.price * quantity
             suborder.save()
 
+            products_detail.append({
+                'product_name': product.name,
+                'quantity': quantity,
+                'price': product.price,
+                'total_price': product.price * quantity,
+            })
+
         cart_items.delete()
+
+        send_order_confirmation_email(order, products_detail)
+
+        for seller in suborders_data.keys():
+            send_seller_order_notification(order, seller)
 
 
 class OrderSellerView(viewsets.ReadOnlyModelViewSet):
