@@ -4,10 +4,11 @@ from .models import Suborder
 
 
 class SuborderSerializer(serializers.ModelSerializer):
+    order_username = serializers.CharField(source='order.user.username', read_only=True)
+    order_email = serializers.EmailField(source='order.user.email', read_only=True)
 
     class Meta:
         model = Suborder
-        fields = '__all__'
-        read_only_fields = ['seller']
+        fields = ['id', 'order', 'subtotal', 'seller', 'status', 'order_username', 'order_email']
 
 
