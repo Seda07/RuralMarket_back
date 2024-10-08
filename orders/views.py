@@ -39,7 +39,7 @@ class CreateOrderView(viewsets.ModelViewSet):
             raise ValidationError({"message": "No tienes productos en tu carrito."})
 
         suborders_data = {}
-        products_detail = []  # Para almacenar detalles de los productos
+        products_detail = []
 
         for cart_item in cart_items:
             product = cart_item.product
