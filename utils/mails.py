@@ -4,13 +4,13 @@ from django.conf import settings
 
 def send_welcome_email(user):
     subject = 'Bienvenido a nuestro marketplace'
-    message = f'Hola {user.username}, gracias por registrarte.'
+    message = f'Hola {user.username}, gracias por registrarte en RuralMarket.'
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [user.email]
     send_mail(subject, message, from_email, recipient_list)
 
 
-def send_order_confirmation_email(order, products_detail):
+def send_order_confirmation_email(order):
     subject = f'Pedido {order.id} creado exitosamente.'
     message = f'Hola {order.user.first_name} tu pedido {order.id} ha sido creado exitosamente.\n'
 
