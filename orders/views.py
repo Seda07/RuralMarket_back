@@ -39,7 +39,6 @@ class CreateOrderView(viewsets.ModelViewSet):
             raise ValidationError({"message": "No tienes productos en tu carrito."})
 
         suborders_data = {}
-        products_detail = []
 
         for cart_item in cart_items:
             product = cart_item.product
@@ -67,16 +66,9 @@ class CreateOrderView(viewsets.ModelViewSet):
             suborder.subtotal += product.price * quantity
             suborder.save()
 
-            products_detail.append({
-                'product_name': product.name,
-                'quantity': quantity,
-                'price': product.price,
-                'total_price': product.price * quantity,
-            })
-
         cart_items.delete()
 
-        send_order_confirmation_email(order, products_detail)
+        send_order_confirmation_email(order)
 
         for seller in suborders_data.keys():
             send_seller_order_notification(order, seller)
