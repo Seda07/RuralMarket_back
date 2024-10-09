@@ -3,7 +3,8 @@ from .models import SuborderProduct
 
 
 class SuborderProductSerializer(serializers.ModelSerializer):
+    product_name = serializers.ReadOnlyField(source='product.name', read_only=True)
     class Meta:
         model = SuborderProduct
         fields = '__all__'
-        read_only_fields = ['seller', 'order_id']
+
