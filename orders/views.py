@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 from orders.models import Order
 from cart.models import CartItem
 from suborders.models import Suborder
@@ -79,6 +80,50 @@ class OrderSellerView(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        orders = Order.objects.filter(user=self.request.user)
+        return orders
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        orders = []
+
+        for order in queryset:
+            order_data = {
+                "id": order.id,
+                "username": order.user.username,
+                "email": order.user.email,
+                "total": str(order.total),
+                "order_date": order.order_date,
+                "status": order.status,
+                "suborders": []
+            }
+
+            suborders = Suborder.objects.filter(order=order)
+
+            for suborder in suborders:
+                suborder_data = {
+                    "id": suborder.id,
+                    "seller_id": suborder.seller.id,
+                    "seller_name": suborder.seller.first_name,
+                    "subtotal": str(suborder.subtotal),
+                    "status": suborder.status,
+                    "products": []
+                }
+
+                suborder_products = SuborderProduct.objects.filter(suborder=suborder)
+
+                for item in suborder_products:
+                    suborder_data["products"].append({
+                        "product_id": item.product.id,
+                        "product_name": item.product.name,
+                        "quantity": item.quantity,
+                        "sold_price": str(item.sold_price),
+                        "seller_name": item.product.seller.first_name
+                    })
+
+                order_data["suborders"].append(suborder_data)
+
+            orders.append(order_data)
+
+        return Response(orders)
 
