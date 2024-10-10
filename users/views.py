@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .serializer import RegisterSerializer, UserDetailSerializer, UserUpdateSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework.views import APIView
 
 
 class RegisterView(generics.CreateAPIView):
@@ -26,6 +27,30 @@ class RegisterView(generics.CreateAPIView):
             raise ValidationError({"first_name": "Este nombre ya está en uso. Por favor, elige otro."})
 
         return super().create(request, *args, **kwargs)
+
+
+class CheckUsernameExistsView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            return Response({'message': 'Este nombre de usuario ya está en uso.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Disponible'}, status=status.HTTP_200_OK)
+
+
+class CheckEmailExistsView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            return Response({'message': 'Este correo electrónico ya está en uso.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Disponible'}, status=status.HTTP_200_OK)
+
+
+class CheckFirstNameExistsView(APIView):
+    def post(self, request):
+        first_name = request.data.get('first_name')
+        if CustomUser.objects.filter(first_name=first_name).exists():
+            return Response({'message': 'Este nombre ya está en uso.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Disponible'}, status=status.HTTP_200_OK)
 
 
 class LogoutView(views.APIView):
@@ -64,6 +89,7 @@ class UserDeleteView(generics.DestroyAPIView):
 
     def get_object(self):
         return self.request.user
+
 
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.filter(user_type='seller')
