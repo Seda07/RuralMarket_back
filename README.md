@@ -5,11 +5,11 @@ Welcome to the **RuralMarket** backend repository 🌟
 ## 🌐 Table of Contents
 
 1. [Project Description](#-project-description)
-2. [Features](#features)
+2. [Features](#-features)
 3. [Technologies Used](#-technologies-used)
 4. [Installation](#-installation)
 5. [Usage](#-usage)
-6. [Front-end Repository](#front-end-repository)
+6. [Front-end Repository](#-front-end-repository)
 7. [Development Team](#-development-team)
 8. [License](#-license)
 
@@ -39,6 +39,8 @@ In **RuralMarket**, you can:
 - ☁️ **Cloudinary**: Version 1.41.0.
 - 🧪 **Pytest**: Version 8.3.3.
 - 🛢️ **Psycopg2**: Version 2.9.9.
+- ✉️ **Mailtrap**: Version Email Testing.
+- 🚀 **Postman**: Version 11.
 
 ## ⚙️ Installation
 
@@ -106,7 +108,7 @@ This project works alongside the RuralMarket front-end. For access to the code a
 
 ## 👥 Development Team
 
-| Nombre               | Rol                   | Contacto                      |
+| Name               | Rol                   | Contact                     |
 |----------------------|-----------------------|-------------------------------|
 | Seda Gevorgian         | Scrum Manager | [GitHub](https://github.com/Seda07) |
 | Belén Sanchez         | Product Owner | [GitHub](https://github.com/Belensanchez1989) |
